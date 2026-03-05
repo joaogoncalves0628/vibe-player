@@ -9,7 +9,7 @@ import { useEffect } from "react";
 const AlbumDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { setActiveGradient } = usePlayer();
+  const { setActiveGradient, playSong } = usePlayer();
   const album = albums.find((a) => a.id === id);
 
   useEffect(() => {
@@ -93,6 +93,7 @@ const AlbumDetail = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => playSong(album.songs[0], album)}
                 className="flex items-center gap-2 px-6 py-3 rounded-full gradient-primary text-primary-foreground font-semibold shadow-lg"
                 style={{ boxShadow: `0 8px 30px ${album.colors[0]}44` }}
               >

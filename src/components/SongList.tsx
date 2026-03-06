@@ -12,9 +12,9 @@ export function SongList({ songs, album }: SongListProps) {
   const { playSong, toggleLike, isLiked, currentSong } = usePlayer();
 
   return (
-    <div className="space-y-1">
-      {/* Header */}
-      <div className="grid grid-cols-[32px_1fr_auto_40px] gap-3 px-4 py-2 text-xs text-muted-foreground uppercase tracking-wider border-b border-border/50">
+    <div className="space-y-0.5">
+      {/* Header - hidden on mobile */}
+      <div className="hidden sm:grid grid-cols-[32px_1fr_auto_40px] gap-3 px-4 py-2 text-xs text-muted-foreground uppercase tracking-wider border-b border-border/50">
         <span>#</span>
         <span>Título</span>
         <Clock className="w-3.5 h-3.5" />
@@ -31,20 +31,20 @@ export function SongList({ songs, album }: SongListProps) {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.04 }}
-            className={`group grid grid-cols-[32px_1fr_auto_40px] gap-3 px-4 py-2.5 rounded-lg transition-all cursor-pointer
-              ${active ? "bg-primary/10" : "hover:bg-secondary/60"}`}
+            className={`group flex items-center gap-3 px-3 sm:px-4 py-3 sm:py-2.5 rounded-xl sm:rounded-lg transition-all cursor-pointer active:scale-[0.98]
+              ${active ? "bg-primary/10" : "hover:bg-secondary/60 active:bg-secondary/80"}`}
             onClick={() => playSong(song, album)}
           >
             {/* Track number / play icon */}
-            <div className="flex items-center justify-center">
-              <span className={`text-sm group-hover:hidden ${active ? "text-primary font-bold" : "text-muted-foreground"}`}>
+            <div className="flex items-center justify-center w-8 flex-shrink-0">
+              <span className={`text-sm sm:group-hover:hidden ${active ? "text-primary font-bold" : "text-muted-foreground"}`}>
                 {song.trackNumber}
               </span>
-              <Play className="w-4 h-4 text-foreground hidden group-hover:block fill-current" />
+              <Play className="w-4 h-4 text-foreground hidden sm:group-hover:block fill-current" />
             </div>
 
             {/* Title & artist */}
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <p className={`text-sm font-medium truncate ${active ? "text-primary" : "text-foreground"}`}>
                 {song.title}
               </p>
@@ -52,7 +52,7 @@ export function SongList({ songs, album }: SongListProps) {
             </div>
 
             {/* Duration */}
-            <span className="text-xs text-muted-foreground self-center">{song.duration}</span>
+            <span className="text-xs text-muted-foreground flex-shrink-0">{song.duration}</span>
 
             {/* Like */}
             <motion.button
@@ -61,11 +61,11 @@ export function SongList({ songs, album }: SongListProps) {
                 e.stopPropagation();
                 toggleLike(song.id);
               }}
-              className="self-center p-1 rounded-full"
+              className="p-1.5 rounded-full flex-shrink-0"
             >
               <Heart
                 className={`w-4 h-4 transition-all ${
-                  liked ? "fill-liked text-liked animate-like-pop" : "text-muted-foreground/40 group-hover:text-muted-foreground"
+                  liked ? "fill-liked text-liked animate-like-pop" : "text-muted-foreground/40 sm:group-hover:text-muted-foreground"
                 }`}
               />
             </motion.button>

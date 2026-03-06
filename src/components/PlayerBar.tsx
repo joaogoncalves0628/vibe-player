@@ -14,7 +14,7 @@ export function PlayerBar() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
-          className="fixed bottom-0 left-0 right-0 z-50 glass-strong"
+          className="fixed bottom-0 left-0 right-0 z-50 glass-strong safe-bottom"
           style={{
             borderTop: `1px solid ${activeGradient[0]}33`,
             boxShadow: `0 -8px 40px ${activeGradient[0]}22`,
@@ -27,9 +27,9 @@ export function PlayerBar() {
             }}
           />
 
-          <div className="relative flex items-center justify-between px-4 sm:px-6 py-3 max-w-screen-xl mx-auto">
+          <div className="relative flex items-center justify-between px-3 sm:px-6 py-2.5 sm:py-3 max-w-screen-xl mx-auto">
             {/* Song info */}
-            <div className="flex items-center gap-3 min-w-0 flex-1">
+            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
               {currentAlbum.coverUrl && (
                 <motion.img
                   key={currentSong.id}
@@ -37,24 +37,24 @@ export function PlayerBar() {
                   animate={{ scale: 1, opacity: 1 }}
                   src={currentAlbum.coverUrl}
                   alt={currentAlbum.title}
-                  className="w-12 h-12 rounded-md object-cover shadow-lg"
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-md object-cover shadow-lg flex-shrink-0"
                 />
               )}
               <div className="min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">{currentSong.title}</p>
-                <p className="text-xs text-muted-foreground truncate">{currentSong.artist}</p>
+                <p className="text-xs sm:text-sm font-medium text-foreground truncate">{currentSong.title}</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground truncate">{currentSong.artist}</p>
               </div>
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
               <motion.button
                 whileTap={{ scale: 0.85 }}
                 onClick={() => toggleLike(currentSong.id)}
                 className="p-2 rounded-full transition-colors hover:bg-secondary"
               >
                 <Heart
-                  className={`w-5 h-5 transition-all ${
+                  className={`w-4 h-4 sm:w-5 sm:h-5 transition-all ${
                     isLiked(currentSong.id) ? "fill-liked text-liked animate-like-pop" : "text-muted-foreground"
                   }`}
                 />
@@ -65,9 +65,9 @@ export function PlayerBar() {
                 href={getYoutubeMusicUrl(currentSong)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 rounded-full gradient-primary text-primary-foreground text-sm font-medium"
+                className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-full gradient-primary text-primary-foreground text-xs sm:text-sm font-medium"
               >
-                <Play className="w-4 h-4 fill-current" />
+                <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
                 <span className="hidden sm:inline">YouTube Music</span>
                 <ExternalLink className="w-3 h-3" />
               </motion.a>

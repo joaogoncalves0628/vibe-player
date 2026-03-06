@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { PlayerProvider } from "@/contexts/PlayerContext";
 import { Sidebar } from "@/components/Sidebar";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { PlayerBar } from "@/components/PlayerBar";
 import Index from "./pages/Index";
 import Library from "./pages/Library";
@@ -14,6 +15,25 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+function AppLayout() {
+  const isMobile = useIsMobile();
+
+  return (
+    <div className="flex min-h-screen">
+      <Sidebar />
+      <main className={`flex-1 ${isMobile ? 'ml-0 pt-16' : 'ml-56'}`}>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/library" element={<Library />} />
+          <Route path="/playlists" element={<Playlists />} />
+          <Route path="/album/:id" element={<AlbumDetail />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+    </div>
+  );
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -21,18 +41,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <div className="flex min-h-screen">
-            <Sidebar />
-            <main className="flex-1 ml-56">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/library" element={<Library />} />
-                <Route path="/playlists" element={<Playlists />} />
-                <Route path="/album/:id" element={<AlbumDetail />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-          </div>
+          <AppLayout />
           <PlayerBar />
         </BrowserRouter>
       </PlayerProvider>

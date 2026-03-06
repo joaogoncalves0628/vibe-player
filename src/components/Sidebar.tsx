@@ -1,30 +1,42 @@
-import { motion } from "framer-motion";
-import { Home, Heart, Library, Music2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Home, Heart, Library, Music2, Menu, X } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 export function Sidebar() {
+  const isMobile = useIsMobile();
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  // Close on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
   const links = [
     { to: "/", icon: Home, label: "Início" },
     { to: "/library", icon: Heart, label: "Curtidas" },
     { to: "/playlists", icon: Library, label: "Playlists" },
   ];
 
-  return (
-    <motion.aside
-      initial={{ x: -40, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-      className="fixed left-0 top-0 bottom-0 z-40 w-56 glass-strong flex flex-col py-6 px-3"
-    >
-      {/* Logo */}
-      <div className="flex items-center gap-2.5 px-3 mb-8">
-        <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center shadow-lg">
-          <Music2 className="w-4.5 h-4.5 text-primary-foreground" />
+  const sidebarContent = (
+    <>
+      <div className="flex items-center justify-between px-3 mb-8">
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center shadow-lg">
+            <Music2 className="w-4.5 h-4.5 text-primary-foreground" />
+          </div>
+          <span className="font-display font-bold text-xl gradient-text">Vibes</span>
         </div>
-        <span className="font-display font-bold text-xl gradient-text">Vibes</span>
+        {isMobile && (
+          <button onClick={() => setOpen(false)} className="p-2 rounded-lg hover:bg-secondary text-muted-foreground">
+            <X className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
-      {/* Nav links */}
       <nav className="flex flex-col gap-1">
         {links.map((link) => (
           <NavLink
@@ -40,11 +52,59 @@ export function Sidebar() {
         ))}
       </nav>
 
-      {/* Bottom decoration */}
       <div className="mt-auto px-3">
         <div className="h-px w-full bg-border/50 mb-4" />
         <p className="text-[10px] text-muted-foreground/50 font-medium">© 2026 Vibes Player</p>
       </div>
+    </>
+  );
+
+  if (isMobile) {
+    return (
+      <>
+        {/* Hamburger button */}
+        <button
+          onClick={() => setOpen(true)}
+          className="fixed top-4 left-4 z-50 p-2.5 rounded-xl glass-strong shadow-lg"
+        >
+          <Menu className="w-5 h-5 text-foreground" />
+        </button>
+
+        {/* Overlay */}
+        <AnimatePresence>
+          {open && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+                onClick={() => setOpen(false)}
+              />
+              <motion.aside
+                initial={{ x: -280 }}
+                animate={{ x: 0 }}
+                exit={{ x: -280 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                className="fixed left-0 top-0 bottom-0 z-50 w-64 glass-strong flex flex-col py-6 px-3"
+              >
+                {sidebarContent}
+              </motion.aside>
+            </>
+          )}
+        </AnimatePresence>
+      </>
+    );
+  }
+
+  return (
+    <motion.aside
+      initial={{ x: -40, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="fixed left-0 top-0 bottom-0 z-40 w-56 glass-strong flex flex-col py-6 px-3"
+    >
+      {sidebarContent}
     </motion.aside>
   );
 }

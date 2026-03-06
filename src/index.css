@@ -100,4 +100,8 @@
   .text-glow {
     text-shadow: 0 0 40px hsl(var(--gradient-accent-1) / 0.4);
   }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
 }
